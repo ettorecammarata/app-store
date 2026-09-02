@@ -81,9 +81,23 @@
     padding: 0.5rem 1.25rem 3rem;
     padding-left: max(1.25rem, env(safe-area-inset-left));
     padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
+
+  .apps {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.9rem;
+  }
+
+  .section-title {
+    margin: 2.5rem 0 0.9rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .apps.upcoming .card {
+    opacity: 0.55;
   }
 
   .card {
@@ -175,6 +189,9 @@
 
     main {
       padding: 0.5rem 1.5rem 4rem;
+    }
+
+    .apps {
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 1rem;
     }
@@ -203,6 +220,7 @@
 </header>
 
 <main>
+  <section class="apps">
 
   <div class="card">
     <h2>ShiniTodo</h2>
@@ -249,20 +267,14 @@
       <a class="btn btn-secondary" href="https://github.com/ettorecammarata/ShinigamiClock/releases">Storico</a>
     </div>
   </div>
-  
 
-  
-  </main>
-  
-  
-  <main>
-  <span>
-  <BR><strong>Le seguenti app non sono ancora funzionanti</strong><br>
-  </span>  
-  </main>
-  <main>
+  </section>
+
+  <h2 class="section-title">Non ancora funzionanti</h2>
+  <section class="apps upcoming">
+
   <div class="card">
-    <h2>MedTrack </h2>
+    <h2>MedTrack</h2>
     <p>Promemoria e tracciamento dell'assunzione dei farmaci, con notifiche pianificate.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/MedTrack/releases/latest/download/MedTrack.apk">Scarica ultima versione</a>
@@ -287,6 +299,8 @@
       <a class="btn btn-secondary" href="https://github.com/ettorecammarata/Orbita/releases">Storico</a>
     </div>
   </div>
+
+  </section>
 </main>
 <footer>
   Repository privati: il download richiede di essere loggati su GitHub con l'account proprietario.
