@@ -354,9 +354,12 @@
 </footer>
 
 <script>
-  // Data di ultimo rilascio di ogni app: è il momento in cui il suo file è stato caricato nella
-  // release fissa di questo repo (updated_at dell'asset), letto dalle API pubbliche di GitHub.
-  // Una sola richiesta per tutte le app; se fallisce (offline, limite API) la data non compare.
+  // Versione e data di ultimo rilascio di ogni app, lette dalle API pubbliche di GitHub.
+  // - Data: momento in cui il file è stato caricato nella release fissa di questo repo
+  //   (created_at dell'asset: il caricamento con --clobber lo ricrea). Non updated_at, che
+  //   cambia anche solo modificando l'etichetta.
+  // - Versione: dall'etichetta dell'asset, nel formato "<file> (versione X)".
+  // Una sola richiesta per tutte le app; se fallisce (offline, limite API) la riga non compare.
   (async () => {
     let releases;
     try {
@@ -366,10 +369,14 @@
     } catch (e) {
       return;
     }
-    const uploaded = {};
+    const assets = {};
     for (const release of releases) {
       for (const asset of release.assets) {
-        uploaded[release.tag_name + '/' + asset.name] = asset.updated_at;
+        const version = (asset.label || '').match(/\(versione ([^)]+)\)$/);
+        assets[release.tag_name + '/' + asset.name] = {
+          date: new Date(asset.created_at),
+          version: version && version[1]
+        };
       }
     }
     const format = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -377,14 +384,14 @@
       // Le app con più file (es. Authara Android + Windows) mostrano il caricamento più recente
       let latest = null;
       for (const link of card.querySelectorAll('a[href*="/releases/download/"]')) {
-        const key = link.getAttribute('href').split('/releases/download/')[1];
-        const date = uploaded[key] && new Date(uploaded[key]);
-        if (date && (!latest || date > latest)) latest = date;
+        const asset = assets[link.getAttribute('href').split('/releases/download/')[1]];
+        if (asset && (!latest || asset.date > latest.date)) latest = asset;
       }
       if (!latest) continue;
       const line = document.createElement('div');
       line.className = 'release-date';
-      line.textContent = 'Ultimo rilascio: ' + format.format(latest);
+      line.textContent = (latest.version ? 'Versione ' + latest.version + ' · ' : '') +
+        'Ultimo rilascio: ' + format.format(latest.date);
       card.querySelector('h2').after(line);
     }
   })();
