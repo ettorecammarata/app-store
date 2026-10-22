@@ -127,6 +127,12 @@
     flex-grow: 1;
   }
 
+  .release-date {
+    margin: -0.3rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
   .actions {
     display: flex;
     gap: 0.6rem;
@@ -346,6 +352,43 @@
   Repository privati: il download richiede di essere loggati su GitHub con l'account proprietario.
   Sorgenti su <a href="https://github.com/ettorecammarata">github.com/ettorecammarata</a>.
 </footer>
+
+<script>
+  // Data di ultimo rilascio di ogni app: è il momento in cui il suo file è stato caricato nella
+  // release fissa di questo repo (updated_at dell'asset), letto dalle API pubbliche di GitHub.
+  // Una sola richiesta per tutte le app; se fallisce (offline, limite API) la data non compare.
+  (async () => {
+    let releases;
+    try {
+      const res = await fetch('https://api.github.com/repos/ettorecammarata/app-store/releases?per_page=100');
+      if (!res.ok) return;
+      releases = await res.json();
+    } catch (e) {
+      return;
+    }
+    const uploaded = {};
+    for (const release of releases) {
+      for (const asset of release.assets) {
+        uploaded[release.tag_name + '/' + asset.name] = asset.updated_at;
+      }
+    }
+    const format = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+    for (const card of document.querySelectorAll('.card')) {
+      // Le app con più file (es. Authara Android + Windows) mostrano il caricamento più recente
+      let latest = null;
+      for (const link of card.querySelectorAll('a[href*="/releases/download/"]')) {
+        const key = link.getAttribute('href').split('/releases/download/')[1];
+        const date = uploaded[key] && new Date(uploaded[key]);
+        if (date && (!latest || date > latest)) latest = date;
+      }
+      if (!latest) continue;
+      const line = document.createElement('div');
+      line.className = 'release-date';
+      line.textContent = 'Ultimo rilascio: ' + format.format(latest);
+      card.querySelector('h2').after(line);
+    }
+  })();
+</script>
 
 </body>
 </html>
