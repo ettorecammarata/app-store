@@ -372,7 +372,7 @@
         uploaded[release.tag_name + '/' + asset.name] = asset.updated_at;
       }
     }
-    const format = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+    const format = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     for (const card of document.querySelectorAll('.card')) {
       // Le app con più file (es. Authara Android + Windows) mostrano il caricamento più recente
       let latest = null;
