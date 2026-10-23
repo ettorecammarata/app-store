@@ -14,3 +14,10 @@ gh release upload shinitodo ShiniTodo-0.0.18-release.apk#shinitodo.apk -R ettore
 
 Il nome dopo `#` è solo l'etichetta: il file caricato deve già chiamarsi come nel link
 (`shinitodo.apk`), quindi rinominalo prima di caricarlo.
+
+## Icone
+
+Ogni scheda mostra l'icona dell'app da `icons/` (`<img class="app-icon" src="icons/<tag>.svg">`).
+Le icone vettoriali Android (vector drawable / adaptive icon) sono convertite in SVG: per le
+adaptive icon il `viewBox` è `18 18 72 72`, cioè la parte visibile dei 108dp. Gli angoli
+arrotondati li mette il CSS, quindi l'SVG resta quadrato e a tutto campo.

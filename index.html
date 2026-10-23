@@ -104,40 +104,183 @@
     opacity: 0.55;
   }
 
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .search {
+    flex: 1 1 100%;
+    position: relative;
+  }
+
+  .search svg {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .search input,
+  .toolbar select {
+    font: inherit;
+    font-size: 16px; /* sotto i 16px iOS zooma sul campo */
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    min-height: 44px;
+  }
+
+  .search input {
+    width: 100%;
+    padding: 0.6rem 0.9rem 0.6rem 2.4rem;
+  }
+
+  .toolbar select {
+    flex: 1 1 auto;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .search input:focus-visible,
+  .toolbar select:focus-visible,
+  .view-toggle button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .view-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .view-toggle button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    min-height: 36px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .view-toggle button[aria-pressed="true"] {
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .empty {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    padding: 2rem 0;
+    text-align: center;
+  }
+
+  [hidden] { display: none !important; }
+
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "icon head"
+      "desc desc"
+      "actions actions";
+    column-gap: 0.9rem;
+    row-gap: 0.75rem;
+  }
+
+  .app-icon {
+    grid-area: icon;
+    width: 56px;
+    height: 56px;
+    border-radius: 22%;
+    background: var(--border);
+    align-self: center;
+  }
+
+  .head {
+    grid-area: head;
+    align-self: center;
+    min-width: 0;
   }
 
   .card h2 {
     margin: 0;
     font-size: 1.1rem;
+    overflow-wrap: anywhere;
   }
 
   .card p {
+    grid-area: desc;
     margin: 0;
     color: var(--text-muted);
     font-size: 0.9rem;
     line-height: 1.5;
-    flex-grow: 1;
   }
 
   .release-date {
-    margin: -0.3rem 0 0;
+    margin: 0.2rem 0 0;
     color: var(--text-muted);
     font-size: 0.8rem;
   }
 
   .actions {
+    grid-area: actions;
     display: flex;
     gap: 0.6rem;
-    margin-top: 0.5rem;
     flex-wrap: wrap;
+  }
+
+  /* Vista a lista: una riga per app, icona a sinistra */
+  .list .apps {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .list .card {
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: auto;
+    row-gap: 0.5rem;
+    column-gap: 0.75rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .list .app-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .list .card p { font-size: 0.85rem; }
+
+  .list .btn {
+    min-height: 40px;
+    padding: 0.5rem 0.9rem;
   }
 
   .btn {
@@ -208,6 +351,30 @@
 
     .card { padding: 1.4rem; }
 
+    .search { flex-basis: 0; }
+
+    .toolbar select { flex: 0 0 auto; }
+
+    .list .card {
+      grid-template-columns: 48px 1fr auto;
+      grid-template-areas:
+        "icon head actions"
+        "icon desc actions";
+      column-gap: 1.1rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .list .app-icon {
+      width: 48px;
+      height: 48px;
+    }
+
+    .list .actions {
+      flex-direction: column;
+      align-self: center;
+      margin-top: 0;
+    }
+
     .btn {
       flex: 0 0 auto;
       padding: 0.55rem 0.9rem;
@@ -230,10 +397,35 @@
 </header>
 
 <main>
+  <div class="toolbar">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <label class="visually-hidden" for="search">Cerca un'app</label>
+      <input type="search" id="search" placeholder="Cerca un'app" autocomplete="off">
+    </div>
+    <label class="visually-hidden" for="sort">Ordina</label>
+    <select id="sort">
+      <option value="newest">Più recenti</option>
+      <option value="oldest">Meno recenti</option>
+      <option value="name">Nome (A–Z)</option>
+    </select>
+    <div class="view-toggle" role="group" aria-label="Visualizzazione">
+      <button type="button" data-view="grid" aria-pressed="true" aria-label="Griglia" title="Griglia">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+      </button>
+      <button type="button" data-view="list" aria-pressed="false" aria-label="Lista" title="Lista">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4" width="4" height="4" rx="1"/><rect x="9" y="5" width="12" height="2" rx="1"/><rect x="3" y="10" width="4" height="4" rx="1"/><rect x="9" y="11" width="12" height="2" rx="1"/><rect x="3" y="16" width="4" height="4" rx="1"/><rect x="9" y="17" width="12" height="2" rx="1"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <p class="empty" id="empty" hidden>Nessuna app corrisponde alla ricerca.</p>
+
   <section class="apps">
 
   <div class="card">
-    <h2>ShiniTodo</h2>
+    <img class="app-icon" src="icons/shinitodo.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>ShiniTodo</h2></div>
     <p>Gestione ToDo nativa Android con notifiche locali e widget in home screen.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/shinitodo/shinitodo.apk">Scarica ultima versione</a>
@@ -242,7 +434,8 @@
   </div>
 
   <div class="card">
-    <h2>ShiniTraining</h2>
+    <img class="app-icon" src="icons/shinitraining.webp" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>ShiniTraining</h2></div>
     <p>Schede di allenamento con storico carichi e sincronizzazione su Google Drive.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/shinitraining/shiniTraining.apk">Scarica ultima versione</a>
@@ -251,7 +444,8 @@
   </div>
 
   <div class="card">
-    <h2>Vehicle Maintenance</h2>
+    <img class="app-icon" src="icons/vehiclemaintenance.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>Vehicle Maintenance</h2></div>
     <p>Tracciamento di manutenzioni, interventi e spese per i tuoi veicoli.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/vehiclemaintenance/vehicleMaintenance.apk">Scarica ultima versione</a>
@@ -260,7 +454,8 @@
   </div>
 
   <div class="card">
-    <h2>Authara</h2>
+    <img class="app-icon" src="icons/authara.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>Authara</h2></div>
     <p>Autenticazione sicura con sequenza numerica e impronta digitale, con client desktop Windows compagno.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/authara/Authara-Android.apk">Scarica Android</a>
@@ -270,7 +465,8 @@
   </div>
 
 <div class="card">
-    <h2>shinigamiClock</h2>
+    <img class="app-icon" src="icons/shinigamiclock.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>shinigamiClock</h2></div>
     <p>Widget orologio per la home screen, completamente personalizzabile: font, colori, formato data/ora, sfondo e ridimensionamento.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/shinigamiclock/ShinigamiClock.apk">Scarica ultima versione</a>
@@ -279,7 +475,8 @@
   </div>
 
   <div class="card">
-    <h2>Vetro</h2>
+    <img class="app-icon" src="icons/vetro.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>Vetro</h2></div>
     <p>Monitoraggio nel tempo del tuo account Instagram: follower persi, non-reciproci, seguaci fantasma e timeline, con ricerca e filtri in ogni lista. Basato su API ufficiali ed export dei dati; foto profilo e spunta "verificato" solo se attivi l'arricchimento opzionale in Impostazioni. Backup e ripristino dei dati locali in un unico file, da fare prima di disinstallare.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/vetro/Vetro.apk">Scarica ultima versione</a>
@@ -288,7 +485,8 @@
   </div>
 
   <div class="card">
-    <h2>Faldone</h2>
+    <img class="app-icon" src="icons/faldone.png" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>Faldone</h2></div>
     <p>Indice dei documenti presenti sul telefono (PDF, Word, Excel, PowerPoint…): una home con le tue categorie e i documenti aperti di recente, più la ricerca fra tutti i file. Scansiona anche carta d'identità, patente e tessera sanitaria, con promemoria prima della scadenza. Tutto resta sul telefono, senza pubblicità.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/faldone/Faldone.apk">Scarica ultima versione</a>
@@ -297,7 +495,8 @@
   </div>
 
   <div class="card">
-    <h2>Folio</h2>
+    <img class="app-icon" src="icons/folio.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>Folio</h2></div>
     <p>Lettore PDF minimale: libreria con tutti i PDF del dispositivo (ricerca, ordinamento, vista a griglia con anteprime, lista o lista compatta; tieni premuto su un documento per le opzioni, tra cui eliminarlo dal dispositivo), apertura dei PDF protetti da password, zoom a due dita, evidenziazioni che restano quando riapri il documento, note, testo e immagini sulle pagine (spostabili e ridimensionabili), Annulla/Ripeti, Stampa e "Salva con nome" scegliendo le pagine da tenere. Compare in "Apri con" per i file PDF.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/folio/Folio.apk">Scarica ultima versione</a>
@@ -306,7 +505,8 @@
   </div>
 
   <div class="card">
-    <h2>LauncherNonni</h2>
+    <img class="app-icon" src="icons/launchernonni.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>LauncherNonni</h2></div>
     <p>Launcher semplificato per persone anziane: home con orologio grande (bianco o nero, con bordo) e sfondo a scelta, solo le app scelte e contatti rapidi con foto (un tocco avvia la chiamata, con conferma opzionale), icone e testo ingrandibili. Tasti del volume bloccati anche durante le chiamate, voce in chiamata sempre al livello scelto, tendina delle notifiche bloccata. Impostazioni protette da PIN o sequenza: tocca l'orologio. Con DialerNonni le chiamate usano una schermata semplificata e la home mostra "Torna alla chiamata". Istruzioni di configurazione nei Dettagli.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/launchernonni/LauncherNonni.apk">Scarica ultima versione</a>
@@ -315,7 +515,8 @@
   </div>
 
   <div class="card">
-    <h2>DialerNonni</h2>
+    <img class="app-icon" src="icons/dialernonni.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>DialerNonni</h2></div>
     <p>App Telefono semplificata per persone anziane, da usare insieme a LauncherNonni. Tastierino con numero in grande, tasto cancella e tasto Chiama; durante la chiamata nome e numero del contatto con due grandi pulsanti, Vivavoce e Chiudi chiamata; chiamata in arrivo con Rispondi e Rifiuta, anche a schermo bloccato. Va impostata come app Telefono predefinita.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/dialernonni/DialerNonni.apk">Scarica ultima versione</a>
@@ -324,7 +525,8 @@
   </div>
 
   <div class="card">
-    <h2>ShinigamiDoc</h2>
+    <img class="app-icon" src="icons/shinigamidoc.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>ShinigamiDoc</h2></div>
     <p>Archivio dei documenti personali: categorie con icone e colori, dettagli, foto e PDF, attività con scadenza, preferiti e backup locale cifrabile. Trova sul telefono PDF, doc, docx, txt e json (anche quelli di WhatsApp e WhatsApp clonato) e li classifica nelle categorie senza copiarli, con ricerca anche nel testo. Tutto resta sul telefono, senza pubblicità.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/shinigamidoc/ShinigamiDoc.apk">Scarica ultima versione</a>
@@ -334,11 +536,12 @@
 
   </section>
 
-  <h2 class="section-title">Non ancora funzionanti</h2>
+  <h2 class="section-title" id="upcoming-title">Non ancora funzionanti</h2>
   <section class="apps upcoming">
 
   <div class="card">
-    <h2>MedTrack</h2>
+    <img class="app-icon" src="icons/medtrack.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>MedTrack</h2></div>
     <p>Promemoria e tracciamento dell'assunzione dei farmaci, con notifiche pianificate.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/medtrack/MedTrack.apk">Scarica ultima versione</a>
@@ -347,7 +550,8 @@
   </div>
 
   <div class="card">
-    <h2>Hush</h2>
+    <img class="app-icon" src="icons/hush.svg" alt="" width="56" height="56" loading="lazy">
+    <div class="head"><h2>Hush</h2></div>
     <p>Silenziatore: scegli quali app non devono più mandarti notifiche, con un tap per attivare o disattivare.</p>
     <div class="actions">
       <a class="btn btn-primary" href="https://github.com/ettorecammarata/app-store/releases/download/hush/Hush.apk">Scarica ultima versione</a>
@@ -363,6 +567,83 @@
 </footer>
 
 <script>
+  // Ricerca, ordinamento e vista griglia/lista. Vista e ordinamento scelti restano
+  // salvati nel browser; la ricerca cerca nel nome e nella descrizione, senza badare agli accenti.
+  const main = document.querySelector('main');
+  const search = document.getElementById('search');
+  const sort = document.getElementById('sort');
+  const sections = [...document.querySelectorAll('section.apps')];
+  const cards = [...document.querySelectorAll('.card')];
+  const normalize = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+  cards.forEach((card, i) => {
+    card.dataset.index = i;
+    card.dataset.text = normalize(card.querySelector('h2').textContent + ' ' + card.querySelector('p').textContent);
+  });
+
+  const prefs = {
+    get(key) { try { return localStorage.getItem('store.' + key); } catch (e) { return null; } },
+    set(key, value) { try { localStorage.setItem('store.' + key, value); } catch (e) {} }
+  };
+
+  function applyView(view) {
+    main.classList.toggle('list', view === 'list');
+    for (const button of document.querySelectorAll('.view-toggle button')) {
+      button.setAttribute('aria-pressed', String(button.dataset.view === view));
+    }
+  }
+
+  function applySort() {
+    // Senza data (API non raggiungibile) le app restano nell'ordine della pagina
+    const date = card => Number(card.dataset.date || 0);
+    const compare = {
+      newest: (a, b) => date(b) - date(a),
+      oldest: (a, b) => (date(a) || Infinity) - (date(b) || Infinity),
+      name: (a, b) => a.querySelector('h2').textContent.localeCompare(b.querySelector('h2').textContent, 'it')
+    }[sort.value];
+    for (const section of sections) {
+      [...section.querySelectorAll('.card')]
+        .sort((a, b) => compare(a, b) || a.dataset.index - b.dataset.index)
+        .forEach(card => section.appendChild(card));
+    }
+  }
+
+  function applySearch() {
+    const terms = normalize(search.value).split(/\s+/).filter(Boolean);
+    let total = 0;
+    for (const section of sections) {
+      let visible = 0;
+      for (const card of section.querySelectorAll('.card')) {
+        const match = terms.every(t => card.dataset.text.includes(t));
+        card.hidden = !match;
+        if (match) visible++;
+      }
+      section.hidden = visible === 0;
+      if (section.classList.contains('upcoming')) {
+        document.getElementById('upcoming-title').hidden = visible === 0;
+      }
+      total += visible;
+    }
+    document.getElementById('empty').hidden = total > 0;
+  }
+
+  for (const button of document.querySelectorAll('.view-toggle button')) {
+    button.addEventListener('click', () => {
+      applyView(button.dataset.view);
+      prefs.set('view', button.dataset.view);
+    });
+  }
+  sort.addEventListener('change', () => {
+    applySort();
+    prefs.set('sort', sort.value);
+  });
+  search.addEventListener('input', applySearch);
+
+  applyView(prefs.get('view') === 'list' ? 'list' : 'grid');
+  if ([...sort.options].some(o => o.value === prefs.get('sort'))) sort.value = prefs.get('sort');
+  applySort();
+  applySearch();
+
   // Versione e data di ultimo rilascio di ogni app, lette dalle API pubbliche di GitHub.
   // - Data: momento in cui il file è stato caricato nella release fissa di questo repo
   //   (created_at dell'asset: il caricamento con --clobber lo ricrea). Non updated_at, che
@@ -397,12 +678,14 @@
         if (asset && (!latest || asset.date > latest.date)) latest = asset;
       }
       if (!latest) continue;
+      card.dataset.date = latest.date.getTime();
       const line = document.createElement('div');
       line.className = 'release-date';
       line.textContent = (latest.version ? 'Versione ' + latest.version + ' · ' : '') +
         'Ultimo rilascio: ' + format.format(latest.date);
       card.querySelector('h2').after(line);
     }
+    applySort();
   })();
 </script>
 
