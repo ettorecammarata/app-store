@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>ShiniTraining – Informativa privacy</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --border: #e2e2e6;
+    --text: #1c1c1f;
+    --text-muted: #6b6b74;
+    --accent: #3661eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15151a;
+      --surface: #1f1f26;
+      --border: #302f3a;
+      --text: #f0f0f3;
+      --text-muted: #a3a3ad;
+      --accent: #6d8bff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15151a;
+    --surface: #1f1f26;
+    --border: #302f3a;
+    --text: #f0f0f3;
+    --text-muted: #a3a3ad;
+    --accent: #6d8bff;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 3rem;
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 0 0 0.3rem;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: 1.05rem;
+    margin: 2rem 0 0.5rem;
+  }
+
+  p, li { font-size: 0.95rem; }
+
+  .muted { color: var(--text-muted); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.2rem 1.25rem 1.2rem;
+    margin-top: 1.5rem;
+  }
+
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="./">← Ettore's App Store</a></p>
+  <h1>ShiniTraining – Informativa privacy</h1>
+  <p class="muted">Ultimo aggiornamento: 31 ottobre 2026</p>
+
+  <div class="card">
+    <h2>In breve</h2>
+    <p>ShiniTraining salva i tuoi dati sul telefono. Se attivi il backup, una copia va nel <strong>tuo</strong> Google Drive, in una cartella privata dell'app. Lo sviluppatore non riceve né vede i tuoi dati, e non ci sono pubblicità, statistiche d'uso o servizi di terze parti.</p>
+
+    <h2>Dati salvati sul dispositivo</h2>
+    <p>Schede di allenamento, esercizi, storico dei carichi, sessioni di allenamento e impostazioni dell'app restano nella memoria privata dell'app sul telefono. Si cancellano disinstallando l'app o cancellandone i dati dalle impostazioni di Android.</p>
+
+    <h2>Accesso con Google e backup su Google Drive</h2>
+    <p>Il backup è facoltativo. Se accedi con Google dalla schermata <em>Impostazioni → Backup su Google Drive</em>:</p>
+    <ul>
+      <li>l'app riceve il nome, l'indirizzo email e la foto del profilo del tuo account Google, solo per mostrarti con quale account sei collegato. Questi dati non vengono inviati altrove;</li>
+      <li>l'app chiede l'accesso a Google Drive solo per la sua cartella dati privata (permesso <code>drive.appdata</code>). Non può vedere, leggere o modificare gli altri file del tuo Drive;</li>
+      <li>in quella cartella salva un file con schede, libreria esercizi e impostazioni, che l'app usa solo per il backup e il ripristino. Lo storico degli allenamenti non viene incluso;</li>
+      <li>se attivi il backup automatico, il file viene aggiornato circa una volta al giorno.</li>
+    </ul>
+    <p>I dati trasferiti a Drive viaggiano cifrati (HTTPS) e sono gestiti da Google secondo le <a href="https://policies.google.com/privacy">norme sulla privacy di Google</a>. L'uso dei dati ricevuti dalle API di Google rispetta le <a href="https://developers.google.com/terms/api-services-user-data-policy">norme sui dati utente dei servizi API di Google</a>, inclusi i requisiti di uso limitato.</p>
+
+    <h2>Come eliminare i dati</h2>
+    <ul>
+      <li>Per scollegare l'account: nell'app tocca <em>Backup su Google Drive → Disconnetti</em>. Il backup automatico si ferma.</li>
+      <li>Per cancellare il backup da Drive: su <a href="https://drive.google.com">drive.google.com</a> apri <em>Impostazioni → Gestisci app → ShiniTraining → Opzioni → Elimina dati app nascosti</em>.</li>
+      <li>Per revocare del tutto l'accesso dell'app al tuo account: <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
+    </ul>
+
+    <h2>Condivisione con terzi</h2>
+    <p>Nessuna. I dati non vengono venduti, condivisi o usati per pubblicità, profilazione o addestramento di modelli.</p>
+
+    <h2>Contatti</h2>
+    <p>Per domande su questa informativa: <a href="mailto:ettorecammarata93@gmail.com">ettorecammarata93@gmail.com</a></p>
+  </div>
+</main>
+</body>
+</html>
